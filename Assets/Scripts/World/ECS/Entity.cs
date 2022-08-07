@@ -1,7 +1,10 @@
+using System.Reflection;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    private static MethodInfo method;
+
     public void Init(DefaultEcs.World world)
     {
         var entity = world.CreateEntity();
@@ -16,9 +19,12 @@ public class Entity : MonoBehaviour
                 continue;
             }
 
-            typeof(Entity).GetMethod("SetComponent")
-                .MakeGenericMethod(c.GetType())
-                .Invoke(null, new object[] { c, entity });
+            if(method == null)
+            {
+                method = typeof(Entity).GetMethod("SetComponent");
+            }
+
+            method.MakeGenericMethod(c.GetType()).Invoke(null, new object[] { c, entity });
         }
     }
 
