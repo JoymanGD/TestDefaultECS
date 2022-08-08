@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
@@ -6,24 +7,11 @@ public class Entity : MonoBehaviour
     {
         var entity = world.CreateEntity();
 
-        var components = GetComponents<Component>();
+        var components = GetComponents<IComponent>();
 
         foreach (var c in components)
         {
-            //skip entity component
-            if(c == this)
-            {
-                continue;
-            }
-
-            typeof(Entity).GetMethod("SetComponent")
-                .MakeGenericMethod(c.GetType())
-                .Invoke(null, new object[] { c, entity });
+            entity.Set(c);
         }
-    }
-
-    public static void SetComponent<T>(in T component, DefaultEcs.Entity entity)
-    {
-        entity.Set<T>(component);
     }
 }

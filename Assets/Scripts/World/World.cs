@@ -1,19 +1,16 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using DefaultEcs.System;
 using UnityEngine;
 
 public class World : MonoBehaviour
 {
     private DefaultEcs.World ecsWorld;
-    private SequentialSystem<float> systems;
+    private List<AFeature<float>> features = new List<AFeature<float>>();
 
     public void Init()
     {
         ecsWorld = new DefaultEcs.World();
         CreateEntities();
-        LaunchSystems();
+        CreateFeatures();
     }
 
     private void CreateEntities()
@@ -26,16 +23,19 @@ public class World : MonoBehaviour
         }
     }
 
-    private void LaunchSystems()
+    private void CreateFeatures()
     {
-        systems = new SequentialSystem<float>
-        (
-            new TestSystem(ecsWorld)
-        );
+        //add some features
+        var f = new TestFeature(ecsWorld);
+        f.CreateSystems();
+        features.Add(f); //add some feature
     }
 
     public void UpdateWorld(float deltaTime)
     {
-        systems.Update(deltaTime);
+        foreach (var feature in features)
+        {
+            feature.UpdateFeature(deltaTime);
+        }
     }
 }
