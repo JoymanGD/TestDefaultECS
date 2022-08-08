@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
@@ -11,7 +12,12 @@ public class Entity : MonoBehaviour
 
         foreach (var c in components)
         {
-            entity.Set(c);
+            c.Init(entity);
         }
+    }
+    
+    public static void SetComponent<T>(in T component, DefaultEcs.Entity entity)
+    {
+        entity.Set<T>(component);
     }
 }

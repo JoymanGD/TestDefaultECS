@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Transform))]
-public class MyPosComponent : MonoBehaviour, IComponent
+public class MyPosComponent : BaseComponent
 {
     [SerializeField]
     public Transform transform;
-
-    public void Init()
+    
+    protected override void InitInternal<T>(T t, DefaultEcs.Entity entity)
     {
         if (transform == null)
         {
             transform = gameObject.transform;
         }
+        base.InitInternal(this, entity);
     }
+
 }
